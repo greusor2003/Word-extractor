@@ -26,6 +26,7 @@ char* word(vector<char> wd)
 {
 	int len = wd.size();
 	char* mot = new char[len];
+	// not nice memory leaks
 	vector<char>::iterator it = wd.begin();
 	for (int i = 0; i < len; i++)
 	 {
@@ -62,7 +63,7 @@ int main()
 		cout << "Error opening file";
 		exit(1);
 	}
-	char stopchar[] = { '\'',' ',',','.','\n',':',';','"','!','?','(',')','[',']','«','»','\t','-','\0' };
+	char stopchar[] = { '\'',' ',',','.','\n',':',';','"','!','?','(',')','[',']','Â«','Â»','\t','-','\0' };
 
 	
 	while (input.get(x))
