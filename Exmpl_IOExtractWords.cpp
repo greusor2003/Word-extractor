@@ -8,6 +8,7 @@
 using namespace std;
 
 bool isin(char x, char* v)
+// searches for x in the string of characters v
 {
 	bool flag = 0;
 	char* p = v;
@@ -22,18 +23,17 @@ bool isin(char x, char* v)
 	return flag;
 }
 
-char* word(vector<char> wd)
+void word(ofstream& out, vector<char> wd)
 {
 	int len = wd.size();
-	char* mot = new char[len];
-	// not nice memory leaks
+	char mot[len];
 	vector<char>::iterator it = wd.begin();
 	for (int i = 0; i < len; i++)
 	 {
 		mot[i] = *it; it++;
 	 }
 	mot[len] = '\0';
-	return mot;
+	out << mot << '\n';
 
 }
 
@@ -45,6 +45,8 @@ int main()
 	cin >> file_name;
 	
 	vector<vector<char>> dict;
+	// the vector of the extracted words
+	
 	vector<vector<char>>::iterator it;
 	
 	ifstream input(file_name);
@@ -52,6 +54,7 @@ int main()
 	
 	char x;
 	vector<char> wd(1,'\0');
+	// container for each extracted word
 
 	if (input.fail())
 	{
@@ -63,8 +66,8 @@ int main()
 		cout << "Error opening file";
 		exit(1);
 	}
-	char stopchar[] = { '\'',' ',',','.','\n',':',';','"','!','?','(',')','[',']','«','»','\t','-','\0' };
-
+	char stopchar[] = { '\'',' ',',','.','\n',':',';','"','!','?','(',')','[',']','?','!','\t','-','\0','<','>' };
+    // the string of the characters we want to purge; to be adjusted upon needs
 	
 	while (input.get(x))
 	{
@@ -75,7 +78,6 @@ int main()
 		else
 		{
 			wd.push_back('\0'); 
-			//cout << word(wd) << endl;
 			dict.push_back(wd);
 			wd.clear();
 		}
@@ -84,14 +86,14 @@ int main()
 	
 	input.close();
 
-	set<vector<char>> s;
+	set<vector<char>> s; // container set eliminates duplicates
 	unsigned size = dict.size();
 	for (unsigned i = 0; i < size; ++i) 
 		s.insert(dict[i]);
 	dict.assign(s.begin(), s.end());
 
 	for (auto w : dict)
-		output << word(w) << "\n";
+		word(output, w);
 
     	output.close();
 	cout <<"Words extracted in 'Words.txt'" << endl;
